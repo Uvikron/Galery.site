@@ -1,21 +1,17 @@
-function addURL(){                                      // url de teste:     https://www.youtube.com/
+var num = 1
+function addURL(){                                          // url de teste:     https://www.youtube.com/
     var sName = document.getElementById("name").value;
     var sUrl = document.getElementById("URL").value;
     var hoverBox = document.createElement("div");
-    if (sUrl !== ""){
-        hoverBox.classList.add("grid-item");
-        hoverBox.innerHTML = "<p> " + "<a href='" + sUrl + "'>" + sName + "</a>" + "<p>";
-        document.getElementById("Grid").appendChild(hoverBox);
-    }
-    else{
-        alert("you didnt especifyed URL, please copy an paste it in the input. (copy all the text in the navegator's bar whith the site of your choise open)");
-    }
     if (sName === ""){
-        var tmplt = "Page Linked"
         hoverBox.classList.add("grid-item");
-        hoverBox.innerHTML = "<p> " + "<a href='" + sUrl + "'>" + tmplt + "</a>" + "<p>";
-        document.getElementById("Grid").appendChild(hoverBox);
+        hoverBox.innerHTML = "<a href='" + sUrl + "'>" + "Link " + num + "</a><button class='delete-button' onclick='deleteUrl(this)'>X</button>";
+        num += 1
+    } else {
+        hoverBox.classList.add("grid-item");
+        hoverBox.innerHTML = "<a href='" + sUrl + "'>" + sName + "</a><button class='delete-button' onclick='deleteUrl(this)'>X</button>";
     }
+    document.getElementById("Grid").appendChild(hoverBox);
     document.getElementById("name").value = "";
     document.getElementById("URL").value = "";
     var clr = getRandomColor()
@@ -32,6 +28,10 @@ function getRandomColor(){
       clr += letters[Math.floor(Math.random() * 16)];
     }
     return clr;
+}
+function deleteUrl(button) {
+    var item = button.parentNode;
+    item.parentNode.removeChild(item);
 }
 function saveLocalStorage(name, url){ 
     if (typeof(Storage) !== "undefined") {
