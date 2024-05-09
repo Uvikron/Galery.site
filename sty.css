@@ -35,3 +35,22 @@ h1{
     padding: 2%;
     text-align: center;
 }
+.delete-button{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+.delete-button:hover{
+    background-color: rgba(255, 255, 255, 0.8);
+}
