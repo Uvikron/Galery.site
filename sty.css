@@ -15,28 +15,33 @@ ul{
 }
 .navbar{
     background-color: rgb(12, 12, 12);
+    position: fixed;
+    top: 0;
+    width: 100%;
     padding-left: 2%;
     color: white;
+    z-index: 9999;
 }
 h1{
     text-align: center;
+    margin-top: 110px;
     color: rgb(74, 74, 74);
     background-color: rgb(16, 16, 16);
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 .grid-container{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: 10px;
 }
 .grid-item{
     border: solid;
-    border-radius: 5%;
-    padding: 2%;
+    border-radius: 100px;
+    padding: 7%;
     text-align: center;
 }
 .delete-button{
-    position: absolute;
+    position: sticky;
     top: 5px;
     right: 5px;
     background-color: rgba(255, 255, 255, 0.5);
