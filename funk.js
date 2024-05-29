@@ -1,45 +1,45 @@
-var num = 1
+var num = 1;
 document.addEventListener('DOMContentLoaded', () => {
     const savedSites = JSON.parse(localStorage.getItem('grid-container')) || [];
     const gridContainer = document.getElementById('Grid');
-    // Iterate through saved sites and create div elements for each
     savedSites.forEach(site => {
         const hoverBox = document.createElement("div");
         hoverBox.classList.add("grid-item");
-        const name = site.name ? site.name : "link " + num;
-        hoverBox.innerHTML = "<a href='" + site.url + "'>" + name + "</a><button class='delete-button' onclick='deleteUrl(this)'>X</button>";
-        var clr = getRandomColor()
-        num += 1
-        hoverBox.style.backgroundColor = clr;
+        hoverBox.dataset.id = site.id;
+        hoverBox.innerHTML = `<a href='${site.url}'>${site.name}</a><button class='delete-button' onclick='deleteUrl("${site.id}")'>X</button>`;
+        hoverBox.style.backgroundColor = getRandomColor();
         gridContainer.appendChild(hoverBox);
     });
-});
-function addURL(){                                          // url de teste:     https://www.youtube.com/
+});                                                    
+function addURL() {                                                // url de teste:     https://www.youtube.com/
     var sName = document.getElementById("name").value;
     var sUrl = document.getElementById("URL").value;
-    var hoverBox = document.createElement("div");
+
     if (sUrl === "") {
         alert("Por favor, insira uma URL");
-    } else if (sName === ""){
-        hoverBox.classList.add("grid-item");
-        hoverBox.innerHTML = "<a href='" + sUrl + "'>" + "Link " + num + "</a><button class='delete-button' onclick='deleteUrl(this)'>X</button>";
-        document.getElementById("Grid").appendChild(hoverBox);
-        num += 1
-        var clr = getRandomColor()
-        hoverBox.style.backgroundColor = clr;
-    }else {
-        hoverBox.classList.add("grid-item");
-        hoverBox.innerHTML = "<a href='" + sUrl + "'>" + sName + "</a><button class='delete-button' onclick='deleteUrl(this)'>X</button>";
-        document.getElementById("Grid").appendChild(hoverBox);
-        var clr = getRandomColor()
-        hoverBox.style.backgroundColor = clr;
+        return;
     }
+
+    var sId = Date.now().toString();
+    var displayName = sName || "Link " + num;
+
+    const gridContainer = document.getElementById('Grid');
+    const hoverBox = document.createElement("div");
+    hoverBox.classList.add("grid-item");
+    hoverBox.dataset.id = sId;
+    hoverBox.innerHTML = `<a href='${sUrl}'>${displayName}</a><button class='delete-button' onclick='deleteUrl("${sId}")'>X</button>`;
+    hoverBox.style.backgroundColor = getRandomColor();
+    gridContainer.appendChild(hoverBox);
+
+    if (document.querySelectorAll(".grid-item").length % 4 === 0) {
+        hoverBox.style.gridColumn = "auto";
+    }
+
+    saveLocalStorage(sId, displayName, sUrl);
+
     document.getElementById("name").value = "";
     document.getElementById("URL").value = "";
-    if (document.querySelectorAll(".grid-item").length % 4 === 0) {
-      hoverBox.style.gridColumn = "auto";
-    }
-    saveLocalStorage(sName, sUrl);
+    num += 1;
 }
 function getRandomColor(){
     var letters = "0123456789ABCDEF";
@@ -49,16 +49,35 @@ function getRandomColor(){
     }
     return clr;
 }
-function deleteUrl(button) {
-    var item = button.parentNode;
-    item.parentNode.removeChild(item);
+function deleteUrl(id) {
+    var item = document.querySelector(`.grid-item[data-id='${id}']`);
+    if (item) {
+        item.parentNode.removeChild(item);
+        removeFromLocalStorage(id);
+    }
 }
-function saveLocalStorage(name, url){ 
+function saveLocalStorage(id, name, url) {
     if (typeof(Storage) !== "undefined") {
         var sites = JSON.parse(localStorage.getItem("grid-container")) || [];
-        sites.push({name: name, url: url});
+        sites.push({ id: id, name: name, url: url });
         localStorage.setItem("grid-container", JSON.stringify(sites));
     } else {
-        alert("Desculpa, seu Browser não suporta Local Storage5.");
+        alert("Desculpa, seu navegador não suporta armazenamento local.");
     }
+}
+function removeFromLocalStorage(id) {
+    if (typeof(Storage) !== "undefined") {
+        var sites = JSON.parse(localStorage.getItem("grid-container")) || [];
+        var updatedSites = sites.filter(site => site.id !== id);
+        localStorage.setItem("grid-container", JSON.stringify(updatedSites));
+    } else {
+        alert("Desculpa, seu navegador não suporta armazenamento local.");
+    }
+}
+function removeAllSites() {
+    var gridItems = document.querySelectorAll('.grid-item');
+    gridItems.forEach(item => {
+        item.parentNode.removeChild(item);
+    });
+    localStorage.removeItem('grid-container');
 }
